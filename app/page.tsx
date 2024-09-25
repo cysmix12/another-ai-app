@@ -1,45 +1,44 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { useChat } from 'ai/react';
-import { Input, Button } from '@mantine/core';
+import { Flex, ScrollAreaAutosize, Text } from '@mantine/core';
 
-const InputArea = (props) => {
-  const { value, onChange, onSubmit } = props;
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    onChange && onChange(value);
-  };
-
-  const handleSubmit = () => {
-    onSubmit && onSubmit();
-  };
-
-  return (
-    <>
-      <Input value={value} onChange={handleChange} />
-      <Button onClick={handleSubmit}>Submit</Button>
-    </>
-  );
-};
+import { ChatMessage, InputArea } from '@/components';
 
 const Home = () => {
-  const { input, setInput, append } = useChat({
+  const viewportRef = useRef<HTMLDivElement>(null);
+
+  const { input, setInput, append, messages } = useChat({
     api: '/api/ai',
   });
 
+  const scrollToBottom = () =>
+    viewportRef.current!.scrollTo({ top: viewportRef.current!.scrollHeight, behavior: 'smooth' });
+
+  const handleSubmit = () => {
+    append({
+      role: 'user',
+      content: input,
+    });
+    setInput('');
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <>
-      <InputArea
-        value={input}
-        onChange={(newValue) => setInput(newValue)}
-        onSubmit={() =>
-          append({
-            role: 'user',
-            content: input,
-          })
-        }
-      />
+      <Text>Another AI App</Text>
+      <ScrollAreaAutosize viewportRef={viewportRef} h={500} mah={500}>
+        <Flex direction="column" gap={16}>
+          {messages.map((message) => (
+            <ChatMessage key={message.id} message={message} />
+          ))}
+        </Flex>
+      </ScrollAreaAutosize>
+      <InputArea value={input} onChange={setInput} onSubmit={handleSubmit} />
     </>
   );
 };
