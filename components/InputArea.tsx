@@ -22,9 +22,13 @@ export const InputArea = (props: InputAreaProps) => {
   return (
     <Flex component="form" gap={16} onSubmit={handleSubmit}>
       <Box w="100%">
-        <Input value={value} onChange={handleChange} />
+        <Input variant="filled" placeholder="Type a message..." value={value} onChange={handleChange} />
       </Box>
-      <Button type="submit">Send</Button>
+      <Box>
+        <Button type="submit" ff="monospace">
+          Send
+        </Button>
+      </Box>
     </Flex>
   );
 };

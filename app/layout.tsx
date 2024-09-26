@@ -9,6 +9,7 @@ const primaryFont = Inter({ subsets: ['latin'] });
 const theme = createTheme({
   scale: 1,
   fontFamily: primaryFont.style.fontFamily,
+  defaultRadius: 'md',
 });
 
 export const metadata: Metadata = {

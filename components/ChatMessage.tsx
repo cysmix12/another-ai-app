@@ -1,6 +1,6 @@
 import { Message } from '@ai-sdk/ui-utils';
-import { Paper, Avatar, Flex, TypographyStylesProvider, Transition } from '@mantine/core';
-import { useMounted } from '@mantine/hooks';
+import { Paper, Avatar, Flex, Stack, Text, TypographyStylesProvider } from '@mantine/core';
+import { format } from 'date-fns';
 import Markdown from 'markdown-to-jsx';
 
 interface WithMarkdownProps {
@@ -24,25 +24,32 @@ interface ChatMessageProps {
 export const ChatMessage = (props: ChatMessageProps) => {
   const { message } = props;
 
-  const isMounted = useMounted();
-
   const isUser = message.role === 'user';
 
   return (
     <Flex gap={16} direction={isUser ? 'row-reverse' : 'row'}>
       <Avatar />
-      <Transition
-        mounted={isMounted}
-        timingFunction="ease"
-        duration={400}
-        transition={isUser ? 'pop-top-right' : 'pop-top-left'}
-      >
-        {(styles) => (
-          <Paper p={16} maw="80%" withBorder style={styles}>
-            {isUser ? message.content : <WithMarkdown content={message.content} />}
-          </Paper>
-        )}
-      </Transition>
+      <Stack maw="75%" gap={4}>
+        <Text size="sm" c="gray.6" ta={isUser ? 'right' : 'left'} ff="monospace">
+          {isUser ? 'Me' : 'AI Helper'}
+        </Text>
+        <Paper py={8} px={16} bg={isUser ? 'blue.9' : 'dark.6'}>
+          {isUser ? (
+            <Text
+              style={{
+                wordBreak: 'break-all',
+              }}
+            >
+              {message.content}
+            </Text>
+          ) : (
+            <WithMarkdown content={message.content} />
+          )}
+        </Paper>
+        <Text size="xs" c="gray.6" mt={4} ta={isUser ? 'right' : 'left'}>
+          {format(message.createdAt as Date, 'p')}
+        </Text>
+      </Stack>
     </Flex>
   );
 };
