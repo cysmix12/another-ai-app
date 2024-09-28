@@ -3,6 +3,8 @@ import { Paper, Avatar, Flex, Stack, Text, TypographyStylesProvider } from '@man
 import { format } from 'date-fns';
 import Markdown from 'markdown-to-jsx';
 
+import { AVATAR } from '@/constants';
+
 interface WithMarkdownProps {
   content: string;
 }
@@ -28,7 +30,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
 
   return (
     <Flex gap={16} direction={isUser ? 'row-reverse' : 'row'}>
-      <Avatar />
+      <Avatar src={isUser ? AVATAR.USER : AVATAR.AI} />
       <Stack maw="75%" gap={4}>
         <Text size="sm" c="gray.6" ta={isUser ? 'right' : 'left'} ff="monospace">
           {isUser ? 'Me' : 'AI Helper'}
@@ -46,7 +48,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
             <WithMarkdown content={message.content} />
           )}
         </Paper>
-        <Text size="xs" c="gray.6" mt={4} ta={isUser ? 'right' : 'left'}>
+        <Text size="xs" c="gray.7" mt={4} ta={isUser ? 'right' : 'left'}>
           {format(message.createdAt as Date, 'p')}
         </Text>
       </Stack>

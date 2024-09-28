@@ -16,7 +16,7 @@ export const InputArea = (props: InputAreaProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
-    onSubmit && onSubmit();
+    value && onSubmit && onSubmit();
   };
 
   return (
@@ -25,7 +25,7 @@ export const InputArea = (props: InputAreaProps) => {
         <Input variant="filled" placeholder="Type a message..." value={value} onChange={handleChange} />
       </Box>
       <Box>
-        <Button type="submit" ff="monospace">
+        <Button type="submit" ff="monospace" disabled={!value}>
           Send
         </Button>
       </Box>
